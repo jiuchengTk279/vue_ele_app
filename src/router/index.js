@@ -44,15 +44,15 @@ const router = new VueRouter({
 })
 
 // 路由导航守卫
-router.beforeEach((to, from, next) => {
-  const isLoin = localStorage.ele_login ? true : false
-  // 判断去向路径是否是登录页面
-  if (to.path === '/login') {
-    next()
-  } else {
-    // 是否在登录状态下
-    isLoin ? next() : next('/login')
-  }
-})
+// router.beforeEach((to, from, next) => {
+//   const isLoin = localStorage.ele_login ? true : false
+//   // 判断去向路径是否是登录页面
+//   if (to.path === '/login') {
+//     next()
+//   } else {
+//     // 是否在登录状态下
+//     isLoin ? next() : next('/login')
+//   }
+// })
 
 export default router
