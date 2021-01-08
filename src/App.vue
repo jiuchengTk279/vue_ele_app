@@ -34,7 +34,9 @@ export default {
 
         function onComplete (data) {
           // data是具体的定位信息   精准定位
-          console.log(data)
+          // console.log(data)
+          self.$store.dispatch('setLocation', data)
+          self.$store.dispatch('setAddress', data.formattedAddress)
         }
 
         function onError (data) {
@@ -45,6 +47,7 @@ export default {
       })
     },
     getLinLatLocation () {
+      const self = this
       // IP定位获取当前城市信息
       AMap.plugin('AMap.CitySearch', function () {
         var citySearch = new AMap.CitySearch()
@@ -64,7 +67,16 @@ export default {
               geocoder.getAddress(lnglat, function(status, data) {
                 if (status === 'complete' && data.info === 'OK') {
                     // result为对应的地理位置详细信息
-                    console.log(data)
+                    // console.log(data)
+                    self.$store.dispatch('setLocation', {
+                      addressComponent: {
+                        city: result.city,
+                        province: result.province
+                      },
+                      formattedAddress: data.regeocode.formattedAddress
+                    })
+
+                    self.$store.dispatch('setAddress', data.regeocode.formattedAddress)
                 }
               })
             })
