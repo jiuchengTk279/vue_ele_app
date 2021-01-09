@@ -1,5 +1,6 @@
 <template>
   <div class="home">
+    <!-- 头部 -->
     <div class="header">
       <!-- 地址定位 -->
       <div class="address_map" @click="$router.push({name: 'address', params: {city: city}})">
@@ -7,29 +8,54 @@
         <span>{{ address }}</span>
         <i class="fa fa-sort-desc"></i>
       </div>
-      <!-- 搜索框 -->
-      <div class="search_wrap">
-        <div class="shop_search">
-          <i class="fa fa-search"></i>
-          搜索商家 商家名称
-        </div>
+    </div>
+    <!-- 搜索框 -->
+    <div class="search_wrap">
+      <div class="shop_search">
+        <i class="fa fa-search"></i>
+        搜索商家 商家名称
       </div>
+    </div>
+    <!-- 内容区域 -->
+    <div id="container">
+      <!-- 轮播图 -->
+      <mt-swipe :auto="4000" class="swiper">
+        <mt-swipe-item v-for="(img,index) in swipeImgs" :key="index">
+          <img :src="img" alt="轮播图">
+        </mt-swipe-item>
+      </mt-swipe>
     </div>
   </div>
 </template>
 
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex'
+import { Swipe, SwipeItem } from 'mint-ui'
 
 export default {
   name: 'home',
+  data () {
+    return {
+      swipeImgs: []
+    }
+  },
   computed: {
     address () {
       return this.$store.getters.address
     },
-    location () {
+    city () {
       return ( this.$store.getters.location.addressComponent.city || 
         this.$store.getters.location.addressComponent.province )
+    }
+  },
+  created () {
+    this.getData()
+  },
+  methods: {
+    getData () {
+      this.$axios('/api/profile/shopping').then(res => {
+        this.swipeImgs = res.data.swipeImgs
+      })
     }
   }
 }
