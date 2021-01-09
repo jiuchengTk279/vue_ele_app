@@ -5,13 +5,18 @@
         <i class="fa fa-search"></i>
         <input type="text" v-model="city_val" placeholder="输入城市名">
       </div>
-      <button @click="$router.go(-1)">取消</button>
+      <button @click="$router.push({name: 'address', params: {city: city}})">取消</button>
     </div>
-    <div style="height: 100%">
+    <div style="height: 100%" v-if="searchList.length == 0">
       <div class="location">
-        <Location :address="city"></Location>
+        <Location :address="city" @click="selectCity({name: city})"></Location>
       </div>
       <Alphabet :cityInfo="cityInfo" :keys="keys" ref="allCity" @selectCity="selectCity"></Alphabet>
+    </div>
+    <div class="search_list" v-else>
+      <ul>
+        <li v-for="(item, index) in searchList" :key="index" @click="selectCity(item)">{{ item.name }}</li>
+      </ul>
     </div>
   </div>
 </template>
@@ -26,7 +31,9 @@ export default {
     return {
       city_val: '',
       cityInfo: null,
-      keys: []
+      keys: [],
+      allCities: [],
+      searchList: []
     }
   },
   components: {
@@ -42,7 +49,13 @@ export default {
   created () {
     this.getCityInfo()
   },
+  watch: {
+    city_val () {
+      this.searchCity()
+    } 
+  },
   methods: {
+    // 获取城市列表信息
     getCityInfo () {
       this.$axios('/api/posts/cities').then(res => {
         this.cityInfo = res.data
@@ -56,12 +69,33 @@ export default {
         this.$nextTick(() => {
           this.$refs.allCity.initScroll()
         })
+
+        // 存储所有城市，用来搜索过滤
+        this.keys.forEach(key => {
+          this.cityInfo[key].forEach(city => {
+            this.allCities.push(city)
+          })
+        })
+
       }).catch(err => {
         console.log(err)
       })
     },
+    // 选择城市
     selectCity (city) {
       this.$router.push({name: '/address', params: {city: city.name }})
+    },
+    // 搜索城市
+    searchCity () {
+      if (!this.city_val) {
+        // 如果搜索框为空, 数组置空
+        this.searchList = []
+      } else {
+         // 根据输入框的关键字检索城市 并存入到searchList数组中
+        this.searchList = this.allCities.filter(item => {
+          return item.name.indexOf(this.city_val) != -1
+        })
+      }
     }
   }
 }
