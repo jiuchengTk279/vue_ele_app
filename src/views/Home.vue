@@ -2,7 +2,7 @@
   <div class="home">
     <div class="header">
       <!-- 地址定位 -->
-      <div class="address_map">
+      <div class="address_map" @click="$router.push({name: 'address', params: {city: city}})">
         <i class="fa fa-map-marker"></i>
         <span>{{ address }}</span>
         <i class="fa fa-sort-desc"></i>
@@ -24,7 +24,13 @@ import { mapActions, mapState, mapGetters } from 'vuex'
 export default {
   name: 'home',
   computed: {
-    ...mapGetters(['address'])
+    address () {
+      return this.$store.getters.address
+    },
+    location () {
+      return ( this.$store.getters.location.addressComponent.city || 
+        this.$store.getters.location.addressComponent.province )
+    }
   }
 }
 </script>
