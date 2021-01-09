@@ -3,7 +3,7 @@
     <Header title="选择收货地址" :isLeft="true"></Header>
     <div class="city_search">
       <div class="search">
-        <span class="city">
+        <span class="city" @click="$router.push('/city')">
           {{ city }}
           <i class="fa fa-angle-down"></i>
         </span>
