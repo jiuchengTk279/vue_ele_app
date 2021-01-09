@@ -12,6 +12,14 @@
       </div>
       <Location :address="address"></Location>
     </div>
+    <div class="area">
+      <ul class="area_list" v-for="(item,index) in areaList" :key="index">
+        <li @click="selectAddress(item)">
+          <h4>{{ item.name }}</h4>
+          <p>{{ item.district}}{{ item.address }}</p>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -25,7 +33,8 @@ export default {
   data () {
     return {
       city: '', // 当前城市
-      search_val: ''
+      search_val: '',
+      areaList: []
     }
   },
   components: {
@@ -41,6 +50,36 @@ export default {
   computed: {
     address () {
       return this.$store.getters.location.formattedAddress
+    }
+  },
+  watch: {
+    // 监听地址选择输入框
+    search_val () {
+      this.searchPlace()
+    }
+  },
+  methods: {
+    searchPlace () {
+      const self = this
+      AMap.plugin('AMap.Autocomplete', function(){
+        // 实例化Autocomplete
+        var autoOptions = {
+          //city 限定城市，默认全国
+          city: self.city
+        }
+        var autoComplete= new AMap.Autocomplete(autoOptions);
+        autoComplete.search(self.search_val, function(status, result) {
+          // 搜索成功时，result即是对应的匹配数据
+          // console.log(result)
+          self.areaList = result.tips
+        })
+      })
+    },
+    selectAddress (item) {
+      // 设置地址
+      this.$store.dispatch('setAddress', item.district + item.address + item.name)
+      // 跳转 home
+      this.router.push('/home')
     }
   }
 }
