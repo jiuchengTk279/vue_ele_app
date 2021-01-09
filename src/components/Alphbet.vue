@@ -1,6 +1,6 @@
 <template>
-  <div class="area">
-    <div class="scroll_wrap" v-if="cityInfo">
+  <div class="area" v-if="cityInfo" ref="area_scroll">
+    <div class="scroll_wrap">
       <!-- 热门城市 -->
       <div class="hot-wrap">
         <div class="title">热门城市</div>
@@ -25,11 +25,25 @@
 </template>
 
 <script>
+import BScroll from 'better-scroll'
+
 export default {
   name: 'alphbet',
+  data () {
+    return {
+      scroll: null
+    }
+  },
   props: {
     cityInfo: Object,
     keys: Array
+  },
+  methods: {
+    initScroll () {
+      this.scroll = new BScroll(this.$refs.area_scroll, {
+        click: true
+      })
+    }
   }
 }
 </script>

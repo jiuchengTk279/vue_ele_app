@@ -7,11 +7,11 @@
       </div>
       <button @click="$router.go(-1)">取消</button>
     </div>
-    <div>
+    <div style="height: 100%">
       <div class="location">
         <Location :address="city"></Location>
       </div>
-      <Alphabet :cityInfo="cityInfo" :keys="keys"></Alphabet>
+      <Alphabet :cityInfo="cityInfo" :keys="keys" ref="allCity"></Alphabet>
     </div>
   </div>
 </template>
@@ -53,6 +53,9 @@ export default {
         this.keys.pop()
         // keys 排序
         this.keys.sort()
+        this.$nextTick(() => {
+          this.$refs.allCity.initScroll()
+        })
       }).catch(err => {
         console.log(err)
       })
