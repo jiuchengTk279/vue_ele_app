@@ -2,24 +2,31 @@
   <div class="area" v-if="cityInfo" ref="area_scroll">
     <div class="scroll_wrap">
       <!-- 热门城市 -->
-      <div class="hot-wrap">
+      <div class="hot-wrap citylist">
         <div class="title">热门城市</div>
         <ul>
-          <li v-for="(item, index) in cityInfo.hotCities" :key="index">{{ item.name }}</li>
+          <li v-for="(item, index) in cityInfo.hotCities" :key="index" @click="$emit('selectCity', item)">{{ item.name }}</li>
         </ul>
       </div>
 
       <!-- 所有城市 -->
       <div class="ity_wrap">
         <!-- 循环按字母排序的 key -->
-        <div class="city_content" v-for="(key, index) in keys" :key="index">
+        <div class="city_content citylist" v-for="(key, index) in keys" :key="index">
           <div class="title">{{ item }}</div>
           <!-- 根据字母 key 展示城市名 -->
           <ul>
-            <li v-for="(item, index) in cityInfo[key]" :key="index">{{ item.name }}</li>
+            <li v-for="(item, index) in cityInfo[key]" :key="index"  @click="$emit('selectCity', item)">{{ item.name }}</li>
           </ul>
         </div>
       </div>
+    </div>
+
+    <div class="area_keys">
+      <ul>
+        <li @click="selectKey(0)">#</li>
+        <li @click="selectKey(index+1)" v-for="(item, index) in keys" :key="index">{{ item }}</li>
+      </ul>
     </div>
   </div>
 </template>
@@ -43,6 +50,13 @@ export default {
       this.scroll = new BScroll(this.$refs.area_scroll, {
         click: true
       })
+    },
+    selectKey (index) {
+      const cityList = this.$refs.area_scroll.getElementsByClassName('citylist')
+      // 根据下标，滚动到相对应的元素上
+      let el = cityList(index)
+      // 滚动到对应的位置上
+      this.scroll.scrollElement(el, 250)
     }
   }
 }

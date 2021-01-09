@@ -11,7 +11,7 @@
       <div class="location">
         <Location :address="city"></Location>
       </div>
-      <Alphabet :cityInfo="cityInfo" :keys="keys" ref="allCity"></Alphabet>
+      <Alphabet :cityInfo="cityInfo" :keys="keys" ref="allCity" @selectCity="selectCity"></Alphabet>
     </div>
   </div>
 </template>
@@ -59,6 +59,9 @@ export default {
       }).catch(err => {
         console.log(err)
       })
+    },
+    selectCity (city) {
+      this.$router.push({name: '/address', params: {city: city.name }})
     }
   }
 }
