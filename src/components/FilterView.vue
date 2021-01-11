@@ -43,6 +43,14 @@ export default {
           this.isSort = true
           this.$emit('searchFixed', true)
           break
+        case 1: // 距离最近
+          this.$emit('update', { condation: this.filterData.navTab[1].condition })
+          this.hideView()
+          break
+        case 2: // 品质联盟
+          this.$emit('update', { condation: this.filterData.navTab[2].condition })
+          this.hideView()
+          break
         default: 
           this.hideView()
           break
@@ -53,7 +61,12 @@ export default {
       this.$emit('searchFixed', false)
     },
     selectSort (item,index) {
-      
+      this.currentSort = index
+      this.filterData.navTab[0].name = this.filterData.sortBy[index].name
+      this.hideView()
+
+      // 更新数据
+      this.$emit('update', { condation: item.code })
     }
   }
 }

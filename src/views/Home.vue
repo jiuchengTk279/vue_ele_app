@@ -40,7 +40,7 @@
     <div class="shoplist-title">推荐商家</div>
 
     <!-- 导航 -->
-    <FilterView :filterData="filterData" @searchFixed="showFilterView"></FilterView>
+    <FilterView :filterData="filterData" @searchFixed="showFilterView" @update="update"></FilterView>
   </div>
 </template>
 
@@ -87,6 +87,9 @@ export default {
     },
     showFilterView (isShow) {
       this.showFilter = isShow
+    },
+    update (condation) {
+      console.log(condation)
     }
   }
 }
