@@ -41,6 +41,12 @@
 
     <!-- 导航 -->
     <FilterView :filterData="filterData" @searchFixed="showFilterView" @update="update"></FilterView>
+  
+    <!-- 商家信息 -->
+    <div class="shoplist">
+      <IndexShop v-for="(item,index) in restaurants" :key="index" :restaurant="item.restaurant"></IndexShop>
+    </div>
+    
   </div>
 </template>
 
@@ -48,6 +54,7 @@
 import { mapActions, mapState, mapGetters } from 'vuex'
 import { Swipe, SwipeItem } from 'mint-ui'
 import FilterView from '../components/FilterView.vue'
+import IndexShop from '../components/IndexShop2.vue'
 
 export default {
   name: 'home',
@@ -56,7 +63,8 @@ export default {
       swipeImgs: [],
       entries: [],
       filterData: null,
-      showFilter: false
+      showFilter: false,
+      restaurants: [], // 存放所有的商家信息
     }
   },
   computed: {
@@ -69,7 +77,8 @@ export default {
     }
   },
   components: {
-    FilterView
+    FilterView,
+    IndexShop
   },
   created () {
     this.getData()
@@ -83,6 +92,10 @@ export default {
       this.$axios('/api/profile/filter').then(res => {
         console.log(res.data)
         this.filterData = res.data
+      })
+      this.$axios.post(`/api/profile/restaurants/1/5`).then(res => {
+        console.log(res.data)
+        this.restaurants = res.data
       })
     },
     showFilterView (isShow) {
