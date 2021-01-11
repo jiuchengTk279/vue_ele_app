@@ -24,7 +24,20 @@
           <img :src="img" alt="轮播图">
         </mt-swipe-item>
       </mt-swipe>
+      <!-- 分类 -->
+      <mt-swipe :auto="0" class="swiper">
+        <mt-swipe-item v-for="(entry, i) in entries" :key="i" class="entry_wrap">
+          <div class="foodentry" v-for="(item, index) in entry" :key="index">
+            <div class="img_wrap">
+              <img :src="item.image" alt="分类">
+            </div>
+            <span>{{ item.name }}</span>
+          </div>
+        </mt-swipe-item>
+      </mt-swipe>
     </div>
+    <!-- 推荐商家 -->
+    <div class="shoplist-title">推荐商家</div>
   </div>
 </template>
 
@@ -36,7 +49,8 @@ export default {
   name: 'home',
   data () {
     return {
-      swipeImgs: []
+      swipeImgs: [],
+      entries: []
     }
   },
   computed: {
@@ -55,6 +69,7 @@ export default {
     getData () {
       this.$axios('/api/profile/shopping').then(res => {
         this.swipeImgs = res.data.swipeImgs
+        this.entries = res.data.entries
       })
     }
   }
