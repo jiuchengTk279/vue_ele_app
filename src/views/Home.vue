@@ -10,7 +10,7 @@
       </div>
     </div>
     <!-- 搜索框 -->
-    <div class="search_wrap">
+    <div class="search_wrap" :class="{'fixedview': showFilter}">
       <div class="shop_search">
         <i class="fa fa-search"></i>
         搜索商家 商家名称
@@ -38,19 +38,25 @@
     </div>
     <!-- 推荐商家 -->
     <div class="shoplist-title">推荐商家</div>
+
+    <!-- 导航 -->
+    <FilterView :filterData="filterData" @searchFixed="showFilterView"></FilterView>
   </div>
 </template>
 
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex'
 import { Swipe, SwipeItem } from 'mint-ui'
+import FilterView from '../components/FilterView.vue'
 
 export default {
   name: 'home',
   data () {
     return {
       swipeImgs: [],
-      entries: []
+      entries: [],
+      filterData: null,
+      showFilter: false
     }
   },
   computed: {
@@ -62,6 +68,9 @@ export default {
         this.$store.getters.location.addressComponent.province )
     }
   },
+  components: {
+    FilterView
+  },
   created () {
     this.getData()
   },
@@ -71,6 +80,13 @@ export default {
         this.swipeImgs = res.data.swipeImgs
         this.entries = res.data.entries
       })
+      this.$axios('/api/profile/filter').then(res => {
+        console.log(res.data)
+        this.filterData = res.data
+      })
+    },
+    showFilterView (isShow) {
+      this.showFilter = isShow
     }
   }
 }
