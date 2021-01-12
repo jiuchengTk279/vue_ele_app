@@ -22,7 +22,11 @@
       </div>
     </div>
     <div class="container" v-if="showShop">
-      商家信息
+      <!-- 导航 -->
+      <FilterView :filterData="filterData" @update="update"></FilterView>
+      <div class="shoplist" v-infinite-scroll="loadMore" :infinite-scroll-disabled="loading">
+        <IndexShop v-for="(item,index) in restaurants" :key="index" :restaurant="item.restaurant"></IndexShop>
+      </div>
     </div>
   </div>
 </template>
@@ -30,6 +34,9 @@
 <script>
 import Header from '../components/Header.vue'
 import SearchIndex from '../components/SearchIndex.vue'
+import FilterView from '../components/FilterView.vue'
+import IndexShop from '../components/IndexShop2.vue'
+import { InfiniteScroll } from "mint-ui";
 
 export default {
   name: 'Search',
@@ -38,12 +45,26 @@ export default {
       key_word: '',
       result: null,
       empty: false,
-      showShop: false
+      showShop: false,
+      filterData: null,
+      data: null,
+      restaurants: [],
+      page: 0,
+      size: 7,
+      loading: false
     }
   },
   components: {
     Header,
-    SearchIndex
+    SearchIndex,
+    FilterView,
+    IndexShop
+  },
+  created () {
+    this.$axios('/api/profile/filter').then(res => {
+      // console.log(res.data)
+      this.filterData = res.data
+    })
   },
   watch: {
     key_word () {
@@ -78,8 +99,25 @@ export default {
       this.page = 0
       this.restaurants = []
       this.showShop = true
+    },
+    update (condation) {
+      this.data = condation
+      this.shopItemClick()
+    },
+    loadMore () {
+      this.page++
+      this.$axios(`/api/profile/restaurants/${this.page}/${this.size}`, this.data).then(res => {
+      //   this.restaurants = res.data
+      if (res.data.length > 0) {
+        res.data.forEach(item => {
+          this.restaurants.push(item)
+        })
+      } else {
+        this.loading = true
+      }
     }
   }
+}
 }
 </script>
 
@@ -157,4 +195,3 @@ export default {
   font-size: 0.8rem;
 }
 </style>
-
