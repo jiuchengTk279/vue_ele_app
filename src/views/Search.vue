@@ -8,11 +8,17 @@
         <button>搜索</button>
       </form>
     </div>
+    <div class="shop" v-if="result">
+      <div>
+        <SearchIndex :data="result.restaurants"></SearchIndex>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import Header from '../components/Header.vue'
+import SearchIndex from '../components/SearchIndex.vue'
 
 export default {
   name: 'Search',
@@ -23,7 +29,8 @@ export default {
     }
   },
   components: {
-    Header
+    Header,
+    SearchIndex
   },
   watch: {
     key_word () {
