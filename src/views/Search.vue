@@ -5,13 +5,24 @@
       <form class="search_wrap">
         <i class="fa fa-search"></i>
         <input type="text" placeholder="输入商家、商品信息" v-model="key_word">
-        <button>搜索</button>
+        <button @click.prevent="searchHandle">搜索</button>
       </form>
     </div>
-    <div class="shop" v-if="result">
-      <div>
-        <SearchIndex :data="result.restaurants"></SearchIndex>
+    <div class="shop" v-if="result && !showShop">
+      <div class="empty_wrap" v-if="empty">
+        <img src="https://fuss10.elemecdn.com/d/60/70008646170d1f654e926a2aaa3afpng.png" alt>
+        <div class="empty_txt">
+          <h4>附近没有搜索结果</h4>
+          <span>换个关键词试试吧</span>
+        </div>
       </div>
+      <div v-else>
+        <SearchIndex :data="result.restaurants" @click="shopItemClick"></SearchIndex>
+        <SearchIndex :data="result.words" @click="shopItemClick"></SearchIndex>
+      </div>
+    </div>
+    <div class="container" v-if="showShop">
+      商家信息
     </div>
   </div>
 </template>
@@ -25,7 +36,9 @@ export default {
   data () {
     return {
       key_word: '',
-      result: null
+      result: null,
+      empty: false,
+      showShop: false
     }
   },
   components: {
@@ -34,6 +47,8 @@ export default {
   },
   watch: {
     key_word () {
+      this.empty = false
+      this.showShop = false
       this.keyWordChange()
     }
   },
@@ -47,6 +62,22 @@ export default {
         console.log(err)
         this.result = null
       })
+    },
+    searchHandle () {
+      // 没有关键字，不执行搜索
+      if (!key_word) return
+      // 有关键字，执行搜索
+      if (this.result && (this.result.restaurants.lenght > 0 || this.result.words.length > 0)) {
+        // console.log('有内容')
+        this.shopItemClick()
+      } else {
+        this.empty = true
+      }
+    },
+    shopItemClick () {
+      this.page = 0
+      this.restaurants = []
+      this.showShop = true
     }
   }
 }
