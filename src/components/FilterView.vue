@@ -76,11 +76,11 @@ export default {
           this.$emit('searchFixed', true)
           break
         case 1: // 距离最近
-          this.$emit('update', { condation: this.filterData.navTab[1].condition })
+          this.$emit('update', { condition: this.filterData.navTab[1].condition })
           this.hideView()
           break
         case 2: // 品质联盟
-          this.$emit('update', { condation: this.filterData.navTab[2].condition })
+          this.$emit('update', { condition: this.filterData.navTab[2].condition })
           this.hideView()
           break
         case 3:
@@ -104,7 +104,7 @@ export default {
       this.hideView()
 
       // 更新数据
-      this.$emit('update', { condation: item.code })
+      this.$emit('update', { condition: item.code })
     },
     selectScreen (item, screen) {
       if (screen.id !== 'MPI') {
@@ -149,7 +149,7 @@ export default {
 
       // console.log(mpiStr)
       // 更新数据
-      this.$emit('update', { condation: screenData })
+      this.$emit('update', { condition: screenData })
       this.hideView()
     }
   }

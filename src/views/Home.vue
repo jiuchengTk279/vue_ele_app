@@ -43,9 +43,11 @@
     <FilterView :filterData="filterData" @searchFixed="showFilterView" @update="update"></FilterView>
   
     <!-- 商家信息 -->
-    <div class="shoplist">
-      <IndexShop v-for="(item,index) in restaurants" :key="index" :restaurant="item.restaurant"></IndexShop>
-    </div>
+    <mt-loadmore :top-method="loadData" :bottom-method="loadMore" :bottom-all-loaded="allLoaded" :auto-fill="false" :bottomPullText="bottomPullText" ref="loadmore" >
+      <div class="shoplist">
+        <IndexShop v-for="(item,index) in restaurants" :key="index" :restaurant="item.restaurant"></IndexShop>
+      </div>
+    </mt-loadmore>
     
   </div>
 </template>
@@ -64,7 +66,12 @@ export default {
       entries: [],
       filterData: null,
       showFilter: false,
+      page: 1,
+      size: 5,
       restaurants: [], // 存放所有的商家信息
+      allLoaded: false,
+      bottomPullText: '上拉加载更多',
+      data: null
     }
   },
   computed: {
@@ -93,16 +100,54 @@ export default {
         console.log(res.data)
         this.filterData = res.data
       })
-      this.$axios.post(`/api/profile/restaurants/1/5`).then(res => {
-        console.log(res.data)
-        this.restaurants = res.data
-      })
+      // this.$axios.post(`/api/profile/restaurants/1/5`).then(res => {
+      //   console.log(res.data)
+      //   this.restaurants = res.data
+      // })
+      this.loadData()
     },
     showFilterView (isShow) {
       this.showFilter = isShow
     },
     update (condation) {
       console.log(condation)
+      this.data = condation
+      this.loadData()
+    },
+    loadData () {
+      this.page = 1
+      this.allLoaded = false
+      this.bottomPullText = '上拉加载更多'
+      // 拉取商家信息
+      this.$axios.post(`/api/profile/restaurants/${this.page}/${this.size}`, this.data).then(res => {
+        // console.log(res.data)
+        this.$refs.loadmore.onTopLoaded
+        this.restaurants = res.data
+      })
+    },
+    loadMore () {
+      if (!this.allLoaded) {
+        this.page++
+        // 拉取商家信息
+        this.$axios.post(`/api/profile/restaurants/${this.page}/${this.size}`).then(res => {
+          // 加载完之后重新渲染
+          this.$refs.loadmore.onBottomLoaded()
+          if (res.data.length > 0) {
+            res.data.forEach(item => {
+              this.restaurants.push(item)
+            })
+            if (res.data < this.size) {
+              this.allLoaded = true
+              this.bottomPullText = '没有更多了'
+            }
+          } else {
+            // 数据为空
+            this.allLoaded = true
+            this.bottomPullText = '没有更多了'
+          }
+
+        })
+      }
     }
   }
 }
