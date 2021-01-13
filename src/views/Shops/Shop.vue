@@ -21,26 +21,33 @@
       </div>
       <!-- 弹窗信息 -->
       <InfoModel :rst="shopInfo.rst" :showInfoModel="showInfoModel" @close="showInfoModel = false"></InfoModel>
+
+      <!-- 评分月售 -->
+      <div class="rst-order">
+        <span>评分{{shopInfo.rst.rating}}</span>
+        <span>月售{{shopInfo.rst.recent_order_num}}</span>
+        <span>蜂鸟专送约{{shopInfo.rst.order_lead_time}}分钟</span>
+      </div>
+
+      <!-- 优惠信息 -->
+      <Activity :activities="shopInfo.rst.activities"></Activity>
+
+      <!-- 公告 -->
+      <p class="rst-promotion">公告: {{shopInfo.rst.promotion_info}}</p>
     </div>
 
-    <!-- 评分月售 -->
-    <div class="rst-order">
-      <span>评分{{shopInfo.rst.rating}}</span>
-      <span>月售{{shopInfo.rst.recent_order_num}}</span>
-      <span>蜂鸟专送约{{shopInfo.rst.order_lead_time}}分钟</span>
-    </div>
-
-    <!-- 优惠信息 -->
-    <Activity :activities="shopInfo.rst.activities"></Activity>
-
-    <!-- 公告 -->
-    <p class="rst-promotion">公告: {{shopInfo.rst.promotion_info}}</p>
+    <!-- 导航 -->
+    <NavBar></NavBar>
+    <keep-alive>
+      <router-view></router-view>
+    </keep-alive>
   </div>
 </template>
 
 <script>
 import InfoModel from '../../components/Shops/InfoModel.vue'
 import Activity from '../../components/Shops/Activity.vue'
+import NavBar from '../../components/Shops/NavBar.vue'
 
 export default {
   name: 'Shop',
@@ -52,7 +59,8 @@ export default {
   },
   components: {
     InfoModel,
-    Activity
+    Activity,
+    NavBar
   },
   created () {
     this.getData()
