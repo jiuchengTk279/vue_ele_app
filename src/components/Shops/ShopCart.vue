@@ -1,13 +1,41 @@
 <template>
   <div class="shopcart">
+    <!-- 购物车蒙版 -->
+    <transition name="fade">
+      <div class="cartview-cartmask" v-if="showCartView && !empty" @click.self="showCartView = false">
+        <div class="cartview-cartbody">
+          <div class="cartview-cartheader">
+            <span>已选商品</span>
+            <button @click="clearFoods">
+              <i class="fa fa-trash-o"></i>
+              <span>清空</span>
+            </button>
+          </div>
+          <div class="entityList-cartbodyScroller">
+            <ul class="entityList-cartlist">
+              <li class="entityList-entityrow" v-for="(food,index) in selectFoods" :key="index">
+                <h4>
+                  <span>{{food.name}}</span>
+                </h4>
+                <span class="entityList-entitytotal">{{food.activity.fixed_price}}</span>
+                <CartControl :food="food"></CartControl>
+              </li>
+            </ul>
+          </div>
+        </div>  
+      </div>
+    </transition>
+
+    <!-- 购物车底部 -->
     <div class="bottomNav-cartfooter" :class="{'bottomNav-carticon-empty':isEmpty}">
-      <span class="bottomNav-carticon">
+      <span class="bottomNav-carticon" @click="showCartView = !showCartView">
         <i class="fa fa-cart-plus"></i>
+        <span v-if="totalCount">{{totalCount}}</span>
       </span>
-      <div class="bottomNav-cartInfo">
+      <div class="bottomNav-cartInfo" @click="showCartView = !showCartView">
         <p class="bottomNav-carttotal">
           <span v-if="isEmpty">未选购商品</span>
-          <span v-else>$0</span>
+          <span v-else>¥{{totalPrice.toFixed(2)}}</span>
         </p>
         <p class="bottomNav-cartdelivery">
           另需配送费{{shopInfo.rst.float_delivery_fee}}元
@@ -22,17 +50,23 @@
 </template>
 
 <script>
+import CartControl from './CartControl.vue'
+
 export default {
   name: 'ShopCart',
   data () {
     return {
       totalCount: 0,
       totalPrice: 0,
-      selectFoods: []
+      selectFoods: [],
+      showCartView: false
     }
   },
   props: {
     shopInfo: Object
+  },
+  components: {
+    CartControl
   },
   computed: {
     isEmpty () {
