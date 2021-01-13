@@ -23,9 +23,9 @@
     <!-- 商品分类 -->
     <div class="menuview">
       <!-- 左侧分类列表 -->
-      <div class="menu-wrapper">
+      <div class="menu-wrapper" ref="menuScroll">
         <ul>
-          <li v-for="(item,index) in shopInfo.menu" :key="index">
+          <li v-for="(item,index) in shopInfo.menu" :key="index" @click="selectMenu(index)" :class="{'current':currentIndex === index}">
             <img v-if="item.icon_url" :src="item.icon_url" alt>
             <span>{{item.name}}</span>
           </li>
@@ -33,7 +33,7 @@
       </div>
 
       <!-- 右侧商品内容 -->
-      <div class="foods-wrapper">
+      <div class="foods-wrapper" ref="foodScroll">
         <ul>
           <li class="food-list-hook" v-for="(item,index) in shopInfo.menu" :key="index">
             <!-- 内容上 -->
@@ -64,13 +64,16 @@
 </template>
 
 <script>
+import BScroll from 'better-scroll'
 import CartControl from '../../components/Shops/CartControl.vue'
 
 export default {
   name: 'Goods',
   data () {
     return {
-      shopInfo: null
+      shopInfo: null,
+      menuScroll: {}, // 左侧滚动对象
+      foodScroll: {}, // 右侧滚动对象
     }
   },
   created () {
@@ -95,7 +98,33 @@ export default {
           })
         })
         this.shopInfo = res.data
+        this.$nextTick(() => {
+          // DOM 已经更新
+          this.initScroll()
+        })
       })
+    },
+    initScroll  () {
+      this.menuScroll = new BScroll(this.$refs.menuScroll, {
+        click: true
+      })
+
+      this.foodScroll = new BScroll(this.$refs.foodScroll, {
+        probeType: 3,
+        click: true
+      })
+
+      this.foodScroll.on('scroll', pos => {
+        console.log(pos.y)
+        this.scrollY = Math.abs(Math.round(pos.y))
+      })
+    },
+    selectMenu  (index) {
+      let foodlist = this.$refs.foodScroll.getElementsByClassName("food-list-hook");
+      let el = foodlist[index]
+      // console.log(el)
+      // 滚动到对应元素的位置
+      this.foodScroll.scrollToElement(el, 250)
     }
   }
 }
