@@ -17,7 +17,7 @@
         </div>
       </div>
       <div v-else>
-        <SearchIndex :data="result.restaurants" @click="shopItemClick"></SearchIndex>
+        <SearchIndex :data="result.restaurants" @click="$router.push('/shop')"></SearchIndex>
         <SearchIndex :data="result.words" @click="shopItemClick"></SearchIndex>
       </div>
     </div>
@@ -108,16 +108,16 @@ export default {
       this.page++
       this.$axios(`/api/profile/restaurants/${this.page}/${this.size}`, this.data).then(res => {
       //   this.restaurants = res.data
-      if (res.data.length > 0) {
-        res.data.forEach(item => {
-          this.restaurants.push(item)
-        })
-      } else {
-        this.loading = true
-      }
+        if (res.data.length > 0) {
+          res.data.forEach(item => {
+            this.restaurants.push(item)
+          })
+        } else {
+          this.loading = true
+        }
+      })
     }
   }
-}
 }
 </script>
 
