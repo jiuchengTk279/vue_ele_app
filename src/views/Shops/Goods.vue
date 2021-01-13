@@ -73,7 +73,9 @@ export default {
     return {
       shopInfo: null,
       menuScroll: {}, // 左侧滚动对象
-      foodScroll: {}, // 右侧滚动对象
+      foodScroll: {}, // 右侧滚动对象,
+      scrollY: 0, // 右侧菜单当前滚动到的y值
+      listHeight: [], // 12个区列表高度
     }
   },
   created () {
@@ -81,6 +83,21 @@ export default {
   },
   components: {
     CartControl
+  },
+  computed: {
+    // 根据右侧滚动的位置, 确定对应的索引下标
+    currentIndex () {
+      for (let i = 0; i < this.listHeight.length; i++) {
+        let height1 = this.listHeight[i]
+        let height2 = this.listHeight[i + 1]
+
+        // 判断是否在两个高度之间
+        if (this.scrollY >= height1 && this.scrollY < height2) {
+          return i
+        }
+      }
+      return 0
+    }
   },
   methods: {
     getData () {
@@ -101,6 +118,8 @@ export default {
         this.$nextTick(() => {
           // DOM 已经更新
           this.initScroll()
+          // 计算12个区的高度
+          this.calculateHeight()
         })
       })
     },
@@ -125,6 +144,19 @@ export default {
       // console.log(el)
       // 滚动到对应元素的位置
       this.foodScroll.scrollToElement(el, 250)
+    },
+    calculateHeight () {
+      let foodlist = this.$refs.foodScroll.getElementsByClassName('food-list-hook')
+      // 每个区的高度添加到数组中
+      let height = 0
+      this.listHeight.push(height)
+
+      for (let i=0;i<foodlist.length-1;i++) {
+        let item = foodlist[i]
+        height += item.clientHeight
+        this.listHeight.push(height)
+      }
+      // console.log(this.listHeight)
     }
   }
 }
