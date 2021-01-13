@@ -1,5 +1,6 @@
 <template>
   <div class="shop" v-if="shopInfo">
+    <!-- 头部 -->
     <nav class="header-nav">
       <div class="nav_bg">
         <img :src="shopInfo.rst.scheme" alt="背景图片">
@@ -11,16 +12,32 @@
         <img :src="shopInfo.rst.image_path" alt="商品图片">
       </div>
     </nav>
+
+    <!-- 商家信息，弹窗的 title -->
+    <div class="index-rst">
+      <div class="rst-name">
+        <span @click="showInfoModel = true">{{ shopInfo.rst.name }}</span>
+        <i class="fa fa-caret-right"></i>
+      </div>
+      <!-- 弹窗信息 -->
+      <InfoModel :rst="shopInfo.rst" :showInfoModel="showInfoModel" @close="showInfoModel = false"></InfoModel>
+    </div>
   </div>
 </template>
 
 <script>
+import InfoModel from '../../components/Shops/InfoModel.vue'
+
 export default {
   name: 'Shop',
   data () {
     return {
-      shopInfo: null
+      shopInfo: null,
+      showInfoModel: false
     }
+  },
+  components: {
+    InfoModel
   },
   created () {
     this.getData()
