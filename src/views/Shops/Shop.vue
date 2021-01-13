@@ -13,7 +13,7 @@
       </div>
     </nav>
 
-    <!-- 商家信息，弹窗的 title -->
+    <!-- 商家信息 -->
     <div class="index-rst">
       <div class="rst-name">
         <span @click="showInfoModel = true">{{ shopInfo.rst.name }}</span>
@@ -22,11 +22,25 @@
       <!-- 弹窗信息 -->
       <InfoModel :rst="shopInfo.rst" :showInfoModel="showInfoModel" @close="showInfoModel = false"></InfoModel>
     </div>
+
+    <!-- 评分月售 -->
+    <div class="rst-order">
+      <span>评分{{shopInfo.rst.rating}}</span>
+      <span>月售{{shopInfo.rst.recent_order_num}}</span>
+      <span>蜂鸟专送约{{shopInfo.rst.order_lead_time}}分钟</span>
+    </div>
+
+    <!-- 优惠信息 -->
+    <Activity :activities="shopInfo.rst.activities"></Activity>
+
+    <!-- 公告 -->
+    <p class="rst-promotion">公告: {{shopInfo.rst.promotion_info}}</p>
   </div>
 </template>
 
 <script>
 import InfoModel from '../../components/Shops/InfoModel.vue'
+import Activity from '../../components/Shops/Activity.vue'
 
 export default {
   name: 'Shop',
@@ -37,7 +51,8 @@ export default {
     }
   },
   components: {
-    InfoModel
+    InfoModel,
+    Activity
   },
   created () {
     this.getData()
