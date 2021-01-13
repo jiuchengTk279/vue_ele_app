@@ -21,6 +21,45 @@
     </div>
 
     <!-- 商品分类 -->
+    <div class="menuview">
+      <!-- 左侧分类列表 -->
+      <div class="menu-wrapper">
+        <ul>
+          <li v-for="(item,index) in shopInfo.menu" :key="index">
+            <img v-if="item.icon_url" :src="item.icon_url" alt>
+            <span>{{item.name}}</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- 右侧商品内容 -->
+      <div class="foods-wrapper">
+        <ul>
+          <li class="food-list-hook" v-for="(item,index) in shopInfo.menu" :key="index">
+            <!-- 内容上 -->
+            <div class="category-title">
+              <strong>{{item.name}}</strong>
+              <span>{{item.description}}</span>
+            </div>
+            <!-- 内容下 -->
+            <div class="fooddetails" v-for="(food,i) in item.foods" :key="i">
+              <!-- 左 -->
+              <img :src="food.image_path" alt>
+              <!-- 右 -->
+              <section class="fooddetails-info">
+                <h4>{{food.name}}</h4>
+                <p class="fooddetails-des">{{food.description}}</p>
+                <p class="fooddetails-sales">月售{{food.month_sales}}份 好评率{{food.satisfy_rate}}</p>
+                <div class="fooddetails-price">
+                  <span class="price">¥{{food.activity.fixed_price}}</span>
+                  <CartControll :food="food"/>
+                </div>
+              </section>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -47,6 +86,12 @@ export default {
         res.data.recommend.forEach(recommend => {
           recommend.items.forEach(item => {
             item.count = 0
+          })
+        })
+
+        res.data.menu.forEach(menu => {
+          menu.foods.forEach(food => {
+            food.count = 0
           })
         })
         this.shopInfo = res.data
