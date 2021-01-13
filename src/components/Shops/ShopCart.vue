@@ -24,14 +24,49 @@
 <script>
 export default {
   name: 'ShopCart',
+  data () {
+    return {
+      totalCount: 0,
+      totalPrice: 0,
+      selectFoods: []
+    }
+  },
   props: {
     shopInfo: Object
   },
   computed: {
     isEmpty () {
       let empty = true
+      this.totalCount = 0
+      this.totalPrice = 0
+      this.selectFoods = []
+      this.shopInfo.recommend.forEach(recommend => {
+        recommend.items.forEach(item => {
+          if (item.count) {
+            empty = false
+            this.totalCount += item.count
+            this.totalPrice += item.activity.fixed_price * item.count;
+            this.selectFoods.push(item)
+          }
+        })
+      })
+
+      this.shopInfo.menu.forEach(menu => {
+        menu.foods.forEach(food => {
+          if (food.count) {
+            empty = false
+            this.totalCount += food.count
+            this.totalPrice += food.activity.fixed_price * food.count;
+            this.selectFoods.push(food)
+          }
+        })
+      })
+
       return empty
     }
+  },
+  created () {
+    console.log(this.shopInfo)
   }
 }
 </script>
