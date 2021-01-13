@@ -60,12 +60,16 @@
         </ul>
       </div>
     </div>
+
+    <!-- 购物车 -->
+    <ShopCart :shopInfo="shopInfo"></ShopCart>
   </div>
 </template>
 
 <script>
 import BScroll from 'better-scroll'
 import CartControl from '../../components/Shops/CartControl.vue'
+import ShopCart from '../../components/Shops/ShopCart.vue'
 
 export default {
   name: 'Goods',
@@ -82,7 +86,8 @@ export default {
     this.getData()
   },
   components: {
-    CartControl
+    CartControl,
+    ShopCart
   },
   computed: {
     // 根据右侧滚动的位置, 确定对应的索引下标
