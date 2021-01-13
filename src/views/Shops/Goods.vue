@@ -13,7 +13,7 @@
             </div>
             <div class="recommend-food-price">
               <p>¥{{item.activity.fixed_price}}</p>
-              <!-- <CartControll :food="item"/> -->
+              <CartControl :food="item"></CartControl>
             </div>
           </li>
         </ul>
@@ -25,6 +25,8 @@
 </template>
 
 <script>
+import CartControl from '../../components/Shops/CartControl.vue'
+
 export default {
   name: 'Goods',
   data () {
@@ -35,10 +37,18 @@ export default {
   created () {
     this.getData()
   },
+  components: {
+    CartControl
+  },
   methods: {
     getData () {
       this.$axios('/api/profile/batch_shop').then(res => {
-        console.log(res.data)
+        // console.log(res.data)
+        res.data.recommend.forEach(recommend => {
+          recommend.items.forEach(item => {
+            item.count = 0
+          })
+        })
         this.shopInfo = res.data
       })
     }
