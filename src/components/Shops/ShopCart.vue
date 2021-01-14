@@ -101,6 +101,21 @@ export default {
   },
   created () {
     console.log(this.shopInfo)
+  },
+  methods: {
+    clearFoods () {
+      this.shopInfo.recommend.forEach(recommend => {
+        recommend.items.forEach(item => {
+          item.count = 0
+        })
+      })
+
+      this.shopInfo.menu.forEach(menu => {
+        menu.foods.forEach(item => {
+          item.count = 0
+        })
+      })
+    }
   }
 }
 </script>
