@@ -7,12 +7,14 @@
         <textarea v-else :type="type" :value="value" :placeholder="placeholder" @input="$emit('input',$event.target.value)" rows="2" maxlength="100"></textarea>
         <i v-if="icon" :class="'fa fa-'+icon"></i>
       </div>
-      <!-- <TabTag v-if="tags" :tags="tags" :selectTag="sex" @checkTag="checkTag"/> -->
+      <TabTag v-if="tags" :tags="tags" :selectTag="sex" @checkTag="checkTag"/>
     </div>
   </div>
 </template>
 
 <script>
+import TabTag from './TabTag.vue'
+
 export default {
   name: 'FormBlock',
   props: {
@@ -27,6 +29,14 @@ export default {
     textarea: String,
     tags: Array,
     sex: String
+  },
+  components: {
+    TabTag
+  },
+  methods: {
+    checkTag (item) {
+      this.$emit('checkSex', item)
+    }
   }
 }
 </script>

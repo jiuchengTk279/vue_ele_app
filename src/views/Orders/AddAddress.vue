@@ -26,17 +26,34 @@
 <script>
 import Header from '../../components/Header.vue'
 import FormBlock from '../../components/Orders/FormBlock.vue'
+import TabTag from '../../components/Orders/TabTag.vue'
 
 export default {
   name: 'addAddress',
   data () {
     return {
-      title: '添加地址'
+      title: '添加地址',
+      tags: ["家", "学校", "公司"],
+      sexes: ["先生", "女士"],
+      addressInfo: {
+        tag: '',
+        sex: ''
+      },
+      showSearch: false
     }
   },
   components: {
     Header,
-    FormBlock
+    FormBlock,
+    TabTag
+  },
+  methods: {
+    checkTag (item) {
+      this.addressInfo.tag = item
+    },
+    checkSex (item) {
+      this.addressInfo.sex = item
+    }
   }
 }
 </script>
