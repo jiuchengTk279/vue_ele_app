@@ -1,11 +1,31 @@
 <template>
   <div class="addAddress">
     <Header :title="title" :isLeft="true"></Header>
+    <!-- 添加地址 -->
+    <div class="viewbody">
+      <div class="content">
+        <FormBlock label="联系人" placeholder="姓名" :tags="sexes" :sex="addressInfo.sex" @checkSex="checkSex" v-model="addressInfo.name"/>
+        <FormBlock v-model="addressInfo.phone" label="电话" placeholder="手机号码"/>
+        <FormBlock v-model="addressInfo.address" @click="showSearch=true" label="地址" placeholder="小区/写字楼/学校等" icon="angle-right" />
+        <FormBlock v-model="addressInfo.bottom" label="门牌号" placeholder="10号楼5单元404" icon="edit" textarea="textarea" />
+        <div class="formblock">
+          <div class="label-wrap">标签</div>
+          <TabTag :tags="tags" :selectTag="addressInfo.tag" @checkTag="checkTag"/>
+        </div>
+      </div>
+      <!-- 确定按钮 -->
+      <div class="form-button-wrap">
+        <button @click="handleSave" class="form-button">确定</button>
+      </div>
+    </div>
+
+    <!-- 搜索地址 -->
   </div>
 </template>
 
 <script>
 import Header from '../../components/Header.vue'
+import FormBlock from '../../components/Orders/FormBlock.vue'
 
 export default {
   name: 'addAddress',
@@ -15,7 +35,8 @@ export default {
     }
   },
   components: {
-    Header
+    Header,
+    FormBlock
   }
 }
 </script>
