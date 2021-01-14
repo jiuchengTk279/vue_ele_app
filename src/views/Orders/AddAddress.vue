@@ -29,6 +29,7 @@ import Header from '../../components/Header.vue'
 import FormBlock from '../../components/Orders/FormBlock.vue'
 import TabTag from '../../components/Orders/TabTag.vue'
 import AddressSearch from '../../components/Orders/AddressSearch.vue'
+import { Toast } from "mint-ui"
 
 export default {
   name: 'addAddress',
@@ -60,6 +61,48 @@ export default {
     },
     checkSex (item) {
       this.addressInfo.sex = item
+    },
+    handleSave () {
+      if (!this.addressInfo.name) {
+        this.showMsg('请输入联系人')
+        return
+      }
+
+      if (!this.addressInfo.phone) {
+        this.showMsg('请输入手机号')
+        return
+      }
+
+      if (!this.addressInfo.address) {
+        this.showMsg('请输入收货地址')
+        return
+      }
+
+      // 存储数据
+      if (this.title == '添加地址') {
+        this.addAddress()
+      } else {
+        this.editAddress()
+      }
+    },
+    showMsg (msg) {
+      Toast({
+        message: msg,
+        position: "bottom",
+        duration: 2000
+      })
+    },
+    addAddress () {
+      this.$axios.post(`/api/user/add_address/${localStorage.ele_login}`, this.addressInfo).then(res => {
+        this.$router.push('/myAddress')
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+    editAddress () {
+      this.$axios.post(`/api/user/edit_address/${localStorage.ele_login}/${this.addressInfo._id}`, this.addressInfo).then(res => {
+        this.$router.push('/myAddress')
+      })
     }
   }
 }
