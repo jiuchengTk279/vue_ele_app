@@ -20,6 +20,7 @@
     </div>
 
     <!-- 搜索地址 -->
+    <AddressSearch @close="showSearch=false" :showSearch="showSearch" :addressInfo="addressInfo"/>
   </div>
 </template>
 
@@ -27,6 +28,7 @@
 import Header from '../../components/Header.vue'
 import FormBlock from '../../components/Orders/FormBlock.vue'
 import TabTag from '../../components/Orders/TabTag.vue'
+import AddressSearch from '../../components/Orders/AddressSearch.vue'
 
 export default {
   name: 'addAddress',
@@ -37,7 +39,11 @@ export default {
       sexes: ["先生", "女士"],
       addressInfo: {
         tag: '',
-        sex: ''
+        sex: '',
+        address: '',
+        name: '',
+        phone: '',
+        bottom: ''
       },
       showSearch: false
     }
@@ -45,7 +51,8 @@ export default {
   components: {
     Header,
     FormBlock,
-    TabTag
+    TabTag,
+    AddressSearch
   },
   methods: {
     checkTag (item) {
