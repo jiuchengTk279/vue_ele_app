@@ -57,7 +57,11 @@ export default {
       this.$router.push('/login')
     },
     myAddress () {
-      
+      if (this.userInfo.myAddress.length > 0) {
+        this.$router.push('/myAddress')
+      } else {
+        this.$$router.push('/addAddress')
+      }
     }
   }
 }
