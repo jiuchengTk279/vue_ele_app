@@ -67,18 +67,23 @@
 import Header from '../../components/Header.vue'
 import Delivery from '../../components/Orders/Delivery.vue'
 import CartGroup from '../../components/Orders/CartGroup.vue'
+import CartItem from '../../components/Orders/CartItem.vue'
+import Tableware from '../../components/Orders/Tableware.vue'
 
 export default {
   name: 'Settlement',
   data () {
     return {
-      haveAddress: false
+      haveAddress: false,
+      showTableware: false
     }
   },
   components: {
     Header,
     Delivery,
-    CartGroup
+    CartGroup,
+    CartItem,
+    Tableware
   },
   beforeRouteEnter (to, from, next) {
     next(vm => {
@@ -96,6 +101,9 @@ export default {
     },
     totalPrice () {
       return this.$store.getters.totalPrice
+    },
+    remarkInfo () {
+      return this.$store.getters.remarkInfo
     }
   },
   methods: {

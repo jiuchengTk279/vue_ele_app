@@ -20,7 +20,8 @@ const getters = {
       price += state.orderInfo.shopInfo.float_delivery_fee
     }
     return price
-  }
+  },
+  remarkInfo: state => state.remarkInfo
 }
 
 Vue.use(Vuex)

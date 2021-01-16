@@ -1,4 +1,4 @@
-import { SET_ADDRESS, SET_LOCATION, ORDER_INFO, USER_INFO } from './mutation-type.js'
+import { SET_ADDRESS, SET_LOCATION, ORDER_INFO, USER_INFO, REMARK_INFO } from './mutation-type.js'
 
 export default {
   setLocation ({commit, state}, location) {
@@ -12,5 +12,8 @@ export default {
   },
   setUserInfo ({commit, state}, userInfo) {
     commit(USER_INFO, userInfo)
+  },
+  setRemarkInfo ({commit, state}, remarkInfo) {
+    commit(REMARK_INFO, remarkInfo)
   }
 }
