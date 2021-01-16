@@ -36,11 +36,18 @@ export default ({
   name: 'Pay',
   data () {
     return {
-      ountDown: "00:15:00",
+      countDown: "00:15:00",
+      timer: null,
+      timeout: false
     }
   },
   components: {
     Header
+  },
+  beforeRouteEnter (to,from,next) {
+    next(vm => {
+      vm.countTimeDown()
+    })
   },
   computed: {
     orderInfo () {
@@ -54,6 +61,38 @@ export default ({
     },
     remarkInfo () {
       return this.$store.getters.remarkInfo
+    }
+  },
+  methods: {
+    countTimeDown () {
+      let minute = 14
+      let second = 59
+
+      this.timer = setInterval(() => {
+        second--
+
+        if (minute == '00' && second == '00') {
+          this.countDown = '订单已超时'
+          clearInterval(this.timer)
+          this.timeout = true
+          return 
+        }
+
+        if (second == '00') {
+          second = 59
+          minute--
+
+          if (minute < 10) {
+            minute = '0' + minute
+          }
+        }
+
+        if (second > 10) {
+          second = '0' + second
+        }
+
+        this.countDown = '00:' + minute + ':' + second
+      }, 1000)
     }
   }
 })
