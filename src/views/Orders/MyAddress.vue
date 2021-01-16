@@ -87,8 +87,8 @@ export default {
     },
     setAddressInfo  (address,index) {
       this.selectIndex = index
-      this.$store.dispatch('setUserInfo', address)
-      this.$router.push('/settlement')
+      // this.$store.dispatch('setUserInfo', address)
+      // this.$router.push('/settlement')
     }
   }
   

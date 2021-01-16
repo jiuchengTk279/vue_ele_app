@@ -35,16 +35,16 @@ export default {
   name: 'addAddress',
   data () {
     return {
-      title: '添加地址',
+      title: '',
       tags: ["家", "学校", "公司"],
       sexes: ["先生", "女士"],
       addressInfo: {
-        tag: '',
-        sex: '',
-        address: '',
-        name: '',
-        phone: '',
-        bottom: ''
+        // tag: '',
+        // sex: '',
+        // address: '',
+        // name: '',
+        // phone: '',
+        // bottom: ''
       },
       showSearch: false
     }
@@ -54,6 +54,12 @@ export default {
     FormBlock,
     TabTag,
     AddressSearch
+  },
+  beforeRouteEnter (to,from,next) {
+    next(vm => {
+      vm.addressInfo = to.params.addressInfo
+      vm.title = to.params.title
+    })
   },
   methods: {
     checkTag (item) {
