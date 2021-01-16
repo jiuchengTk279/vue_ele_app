@@ -1,4 +1,5 @@
 export default {
   location: {},
-  address: ''  
+  address: '',
+  orderInfo: null
 }

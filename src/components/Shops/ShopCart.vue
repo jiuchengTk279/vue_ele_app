@@ -43,7 +43,7 @@
       </div>
       <button class="submit-btn">
         <span v-if="isEmpty">¥{{shopInfo.rst.float_minimum_order_amount}}元起送</span>
-        <span>去结算</span>
+        <span v-else @click="settlement">去结算</span>
       </button>
     </div>
   </div>
@@ -115,6 +115,13 @@ export default {
           item.count = 0
         })
       })
+    },
+    settlement () {
+      this.$store.dispatch('setOrderInfo', {
+        shopInfo: this.shopInfo.rst,
+        selectFoods: this.selectFoods
+      })
+      this.$router.push('/settlement')
     }
   }
 }
