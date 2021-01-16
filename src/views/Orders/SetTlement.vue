@@ -1,6 +1,65 @@
 <template>
   <div class="settlement">
     <Header :isLeft="true" title="确认订单"></Header>
+  
+    <div class="view-body" v-if="orderInfo">
+      <div class>
+        <!-- 收货地址 -->
+        <section class="cart-address">
+          <p class="title">
+            订单配送至
+            <span class="address-tag" v-if="userInfo && userInfo.tag">{{userInfo.tag}}</span>
+          </p>
+          <p class="address-detail">
+            <span
+              @click="$router.push('/myAddress')"
+              v-if="userInfo"
+            >{{userInfo.address}}{{userInfo.bottom}}</span>
+            <span v-else>
+              <span v-if="haveAddress" @click="$router.push('/myAddress')">选择收货地址</span>
+              <span v-else @click="addAddress">新增收货地址</span>
+            </span>
+            <i class="fa fa-angle-right"></i>
+          </p>
+          <h2 v-if="userInfo" class="address-name">
+            <span>{{userInfo.name}}</span>
+            <span v-if="userInfo.sex">({{userInfo.sex}})</span>
+            <span class="phone">{{userInfo.phone}}</span>
+          </h2>
+        </section>
+
+        <!-- 送达时间 -->
+        <Delivery :shopInfo="orderInfo.shopInfo"/>
+
+        <!-- 点餐内容 -->
+        <CartGroup :orderInfo="orderInfo" :totalPrice="totalPrice"/>
+
+        <!-- 备注信息 -->
+        <section class="checkout-section">
+          <CartItem
+            @click="showTableware=true"
+            title="餐具份数"
+            :subHead="remarkInfo.tableware || '未选择'"
+          />
+          <CartItem
+            @click="$router.push('/remark')"
+            title="订单备注"
+            :subHead="remarkInfo.remark || '口味 偏好'"
+          />
+          <CartItem title="发票信息" subHead="不需要开发票"/>
+        </section>
+
+        <!-- 显示Tableware -->
+        <Tableware :isShow="showTableware" @close="showTableware=false"/>
+      </div>
+    </div>
+
+    <!-- 底部 -->
+    <footer class="action-bar">
+      <span>¥{{totalPrice}}</span>
+      <button @click="handlePay()">去支付</button>
+    </footer>
+
   </div>
 </template>
 
@@ -9,8 +68,45 @@ import Header from '../../components/Header.vue'
 
 export default {
   name: 'Settlement',
+  data () {
+    return {
+      haveAddress: false
+    }
+  },
   components: {
     Header
+  },
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      if (!vm.userInfo) {
+        vm.getData()
+      }
+    })
+  },
+  methods: {
+    addAddress () {
+      this.$router.push({name: 'addAddress', params: {
+        title: '添加地址',
+        addressInfo: {
+            name: "",
+            sex: "",
+            phone: "",
+            address: "",
+            bottom: "",
+            tag: ""
+          }
+      } })
+    },
+    getData () {
+      this.$axios(`/api/user/user_info/${localStorage.ele_login}`).then(res => {
+        // console.log(res.data)
+        if (res.data.myAddress.length > 0) {
+          this.haveAddress = true
+        } else {
+          this.haveAddress = false
+        }
+      })
+    }
   }
 }
 </script>
