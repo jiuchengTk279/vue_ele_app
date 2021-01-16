@@ -65,6 +65,7 @@
 
 <script>
 import Header from '../../components/Header.vue'
+import Delivery from '../../components/Orders/Delivery.vue'
 
 export default {
   name: 'Settlement',
@@ -74,7 +75,8 @@ export default {
     }
   },
   components: {
-    Header
+    Header,
+    Delivery
   },
   beforeRouteEnter (to, from, next) {
     next(vm => {
@@ -86,6 +88,9 @@ export default {
   computed: {
     userInfo () {
       return this.$store.getters.userInfo
+    },
+    orderInfo () {
+      return this.$store.getters.orderInfo
     }
   },
   methods: {
