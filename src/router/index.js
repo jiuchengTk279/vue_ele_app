@@ -80,6 +80,11 @@ const routes = [
         path: '/settlement',
         name: 'settlement',
         component: () => import('../views/Orders/SetTlement.vue')
+      },
+      {
+        path: 'remark',
+        name: 'remark',
+        component: () => import('../views/Orders/Remark.vue')
       }
     ]
   },
