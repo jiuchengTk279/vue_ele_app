@@ -66,6 +66,7 @@
 <script>
 import Header from '../../components/Header.vue'
 import Delivery from '../../components/Orders/Delivery.vue'
+import CartGroup from '../../components/Orders/CartGroup.vue'
 
 export default {
   name: 'Settlement',
@@ -76,7 +77,8 @@ export default {
   },
   components: {
     Header,
-    Delivery
+    Delivery,
+    CartGroup
   },
   beforeRouteEnter (to, from, next) {
     next(vm => {
@@ -91,6 +93,9 @@ export default {
     },
     orderInfo () {
       return this.$store.getters.orderInfo
+    },
+    totalPrice () {
+      return this.$store.getters.totalPrice
     }
   },
   methods: {
