@@ -69,6 +69,7 @@ import Delivery from '../../components/Orders/Delivery.vue'
 import CartGroup from '../../components/Orders/CartGroup.vue'
 import CartItem from '../../components/Orders/CartItem.vue'
 import Tableware from '../../components/Orders/Tableware.vue'
+import { Toast } from "mint-ui"
 
 export default {
   name: 'Settlement',
@@ -129,6 +130,17 @@ export default {
           this.haveAddress = false
         }
       })
+    },
+    handlePay () {
+      if(!this.userInfo) {
+        Toast({
+          message: "请选择收货地址",
+          position: "bottom",
+          duration: 2000
+        })
+        return 
+      }
+      this.$router.push('/pay')
     }
   }
 }

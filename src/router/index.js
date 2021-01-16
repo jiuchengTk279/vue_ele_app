@@ -82,9 +82,14 @@ const routes = [
         component: () => import('../views/Orders/SetTlement.vue')
       },
       {
-        path: 'remark',
+        path: '/remark',
         name: 'remark',
         component: () => import('../views/Orders/Remark.vue')
+      },
+      {
+        path: '/pay',
+        name: 'pay',
+        component: () => import('../views/Orders/Pay.vue')
       }
     ]
   },
