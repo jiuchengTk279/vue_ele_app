@@ -87,8 +87,9 @@ export default {
     },
     setAddressInfo  (address,index) {
       this.selectIndex = index
-      // this.$store.dispatch('setUserInfo', address)
-      // this.$router.push('/settlement')
+      // 将 address对象存储到 vuex 中
+      this.$store.dispatch('setUserInfo', address)
+      this.$router.push('/settlement')
     }
   }
   

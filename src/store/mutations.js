@@ -1,4 +1,4 @@
-import { SET_ADDRESS, SET_LOCATION, ORDER_INFO } from './mutation-type.js'
+import { SET_ADDRESS, SET_LOCATION, ORDER_INFO, USER_INFO } from './mutation-type.js'
 
 export default {
   [SET_LOCATION] (state, {location}) {
@@ -20,6 +20,13 @@ export default {
       state.orderInfo = orderInfo
     } else {
       state.orderInfo = null
+    }
+  },
+  [USER_INFO] (state, {userInfo}) {
+    if (userInfo) {
+      state.userInfo = userInfo
+    } else {
+      state.userInfo = null
     }
   }
 }

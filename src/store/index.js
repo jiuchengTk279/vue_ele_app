@@ -8,7 +8,8 @@ import actions from './actions'
 const getters = {
   location: state => state.location,
   address: state => state.address,
-  orderInfo: state => state.orderInfo
+  orderInfo: state => state.orderInfo,
+  userInfo: state => state.userInfo
 }
 
 Vue.use(Vuex)

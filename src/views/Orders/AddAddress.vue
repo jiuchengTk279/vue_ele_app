@@ -100,6 +100,9 @@ export default {
     },
     addAddress () {
       this.$axios.post(`/api/user/add_address/${localStorage.ele_login}`, this.addressInfo).then(res => {
+        if (!this.$store.getters.userInfo) {
+          this.$store.dispatch('setUserInfo', this.addressInfo)
+        }
         this.$router.push('/myAddress')
       }).catch(err => {
         console.log(err)

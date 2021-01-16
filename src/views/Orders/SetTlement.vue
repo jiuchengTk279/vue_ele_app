@@ -83,6 +83,11 @@ export default {
       }
     })
   },
+  computed: {
+    userInfo () {
+      return this.$store.getters.userInfo
+    }
+  },
   methods: {
     addAddress () {
       this.$router.push({name: 'addAddress', params: {
